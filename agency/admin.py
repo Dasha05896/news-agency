@@ -1,3 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import Redactor, Newspaper, Topic
 
-# Register your models here.
+
+@admin.register(Redactor)
+class RedactorAdmin(UserAdmin):
+
