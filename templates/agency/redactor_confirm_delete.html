@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Delete Redactor Account</h1>
+  <p>Are you sure you want to delete the account: <strong>{{ redactor.username }}</strong>?</p>
+  <div class="alert alert-warning">Warning: This action cannot be undone.</div>
+  <form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete Permanently" class="btn btn-danger">
+    <a href="{% url 'agency:redactor-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

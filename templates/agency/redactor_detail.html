@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Redactor: {{ redactor.username }} 
+    <small class="text-muted">({{ redactor.first_name }} {{ redactor.last_name }})</small>
+  </h1>
+  <p><strong>Years of experience:</strong> {{ redactor.years_of_experience }}</p>
+  
+  <div class="mt-3">
+    <a href="{% url 'agency:redactor-update' pk=redactor.id %}" class="btn btn-info">Update Info</a>
+    <a href="{% url 'agency:redactor-delete' pk=redactor.id %}" class="btn btn-danger">Delete Profile</a>
+  </div>
+
+  <hr>
+  <h3>Articles by this author:</h3>
+  <div class="list-group mt-3">
+    {% for newspaper in redactor.newspapers.all %}
+      <a href="{% url 'agency:newspaper-detail' pk=newspaper.id %}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ newspaper.title }}</h5>
+          <small>{{ newspaper.published_date|date:"d.m.Y" }}</small>
+        </div>
+        <p class="mb-1">Topic: {{ newspaper.topic.name }}</p>
+      </a>
+    {% empty %}
+      <p>This editor has not published any articles yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
