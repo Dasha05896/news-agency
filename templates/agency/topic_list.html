@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Topic List</h1>
+  <ul class="list-group">
+    {% for topic in topic_list %}
+      <li class="list-group-item">{{ topic.name }}</li>
+    {% empty %}
+      <li class="list-group-item">No topics available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

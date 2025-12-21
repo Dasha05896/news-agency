@@ -1,0 +1,9 @@
+<div class="sidebar py-3">
+    <h5 class="px-3">Management</h5>
+    <div class="list-group list-group-flush">
+        <a href="{% url 'agency:index' %}" class="list-group-item list-group-item-action">🏠 Dashboard</a>
+        <a href="{% url 'agency:newspaper-create' %}" class="list-group-item list-group-item-action text-success font-weight-bold">+ New Article</a>
+        <a href="{% url 'agency:topic-create' %}" class="list-group-item list-group-item-action">+ New Topic</a>
+        <a href="{% url 'agency:redactor-create' %}" class="list-group-item list-group-item-action">+ New Redactor</a>
+    </div>
+</div>
