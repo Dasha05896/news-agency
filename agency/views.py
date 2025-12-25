@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic, View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Redactor, Newspaper, Topic
 from .forms import NewspaperForm, RedactorCreationForm, NewspaperSearchForm
@@ -141,13 +141,17 @@ class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("agency:redactor-list")
 
 
-@login_required
-def toggle_assign_to_newspaper(request, pk):
-    redactor = Redactor.objects.get(id=request.user.id)
-    if (
-        Newspaper.objects.get(id=pk) in redactor.newspapers.all()
-    ):
-        redactor.newspapers.remove(pk)
-    else:
-        redactor.newspapers.add(pk)
-    return HttpResponseRedirect(reverse_lazy("agency:newspaper-detail", args=[pk]))
+class NewspaperToggleAssignView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        redactor = Redactor.objects.get(id=request.user.id)
+        newspaper = get_object_or_404(Newspaper, id=pk)
+
+        if newspaper in redactor.newspapers.all():
+            redactor.newspapers.remove(newspaper)
+        else:
+            redactor.newspapers.add(newspaper)
+
+        return HttpResponseRedirect(reverse_lazy("agency:newspaper-detail", args=[pk]))
+
+    def get(self, request, pk):
+        return self.post(request, pk)
