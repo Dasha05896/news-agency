@@ -81,3 +81,26 @@ class NewspaperFormTests(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, "Morning News")
         self.assertNotContains(res, "Evening Post")
+
+
+class NewspaperToggleAssignTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="tester", password="password"
+        )
+        self.topic = Topic.objects.create(name="Tech")
+        self.newspaper = Newspaper.objects.create(
+            title="AI News", content="Text", topic=self.topic
+        )
+        self.client.login(username="tester", password="password")
+
+    def test_toggle_assign_to_newspaper(self):
+        url = reverse("agency:toggle-newspaper-assign", args=[self.newspaper.id])
+
+        # Перший виклик - додаємо себе
+        self.client.get(url)
+        self.assertIn(self.user, self.newspaper.publishers.all())
+
+        # Другий виклик - видаляємо себе
+        self.client.get(url)
+        self.assertNotIn(self.user, self.newspaper.publishers.all())
